@@ -8,6 +8,8 @@
 
 This is a production-ready boilerplate for Next.js 15, featuring a robust authentication system powered by **Better Auth**. It includes everything you need to build a secure, modern app: email/password, social logins, magic links, password reset, and two-factor authentication (2FA).
 
+![Project Thumbnail](public/next-better-auth-starter.png)
+
 ## ✨ Features
 
 - **Full-Stack Framework**: Built with the latest Next.js 15 App Router.
