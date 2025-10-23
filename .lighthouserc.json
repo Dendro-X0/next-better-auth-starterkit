@@ -2,8 +2,8 @@
   "ci": {
     "collect": {
       "url": [
-        "https://next-better-auth-starterkit.vercel.app/",
-        "https://next-better-auth-starterkit.vercel.app/auth/login"
+        "https://next-better-auth-starterkit.vercel.app/?lhci=1",
+        "https://next-better-auth-starterkit.vercel.app/auth/login?lhci=1"
       ],
       "numberOfRuns": 3,
       "settings": {

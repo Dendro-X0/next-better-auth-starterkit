@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2025-10-23
+
+### Fixed
+- Fixed Vercel production deployment OAuth redirects.
+
+### Added
+- Added Lighthouse CI workflow, optimized performance and best practices.
+
 ## 2025-09-14
 
 ### Added

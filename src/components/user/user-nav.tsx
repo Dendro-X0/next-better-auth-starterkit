@@ -69,7 +69,11 @@ export function UserNav() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+        <Button
+          variant="ghost"
+          className="relative h-8 w-8 rounded-full"
+          aria-label={`Open user menu for ${userName}`}
+        >
           <Avatar className="h-8 w-8">
             <AvatarImage src={userImage} alt={userName} />
             <AvatarFallback>{userInitial}</AvatarFallback>
