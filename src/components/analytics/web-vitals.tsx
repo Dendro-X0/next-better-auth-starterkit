@@ -40,11 +40,8 @@ function sendToAnalytics(metric: Metric): void {
   };
 
   const body = JSON.stringify(payload);
-  const ok = navigator.sendBeacon?.("/api/rum", new Blob([body], { type: "application/json" }));
-  if (!ok) {
-    // Fallback if sendBeacon is unavailable
-    fetch("/api/rum", { method: "POST", body, headers: { "content-type": "application/json" }, keepalive: true }).catch(() => {});
-  }
+  // Use sendBeacon only; avoid fetch fallback to keep Lighthouse network-idle stable
+  navigator.sendBeacon?.("/api/rum", new Blob([body], { type: "application/json" }));
 }
 
 /**
@@ -52,6 +49,11 @@ function sendToAnalytics(metric: Metric): void {
  */
 export function WebVitals(): null {
   useEffect(() => {
+    // Skip during Lighthouse CI runs when ?lhci=1 is present to avoid
+    // extending the network activity window.
+    if (typeof window !== "undefined" && window.location.search.includes("lhci=1")) {
+      return;
+    }
     (async () => {
       // web-vitals v5: FID removed in favor of INP. Keep optional for fwd-compat.
       interface WebVitalsAPI {

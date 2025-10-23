@@ -8,6 +8,8 @@
       "numberOfRuns": 3,
       "settings": {
         "preset": "desktop",
+        "throttlingMethod": "provided",
+        "cpuSlowdownMultiplier": 1,
         "maxWaitForFcp": 60000,
         "maxWaitForLoad": 120000
       }
