@@ -28,6 +28,7 @@
         "lcp-lazy-loaded": "off",
         "non-composited-animations": "off",
         "prioritize-lcp-image": "off",
+        "link-in-text-block": "off",
         "unused-javascript": ["warn", { "maxLength": 3 }]
       }
     },

@@ -49,7 +49,7 @@ function LoginContent() {
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label htmlFor="password">Password</Label>
-            <Link href="/auth/forgot-password" className="text-sm font-medium text-primary hover:underline">
+            <Link href="/auth/forgot-password" className="text-sm font-medium text-primary underline underline-offset-2">
               Forgot password?
             </Link>
           </div>
@@ -83,7 +83,7 @@ function LoginContent() {
 
       <div className="text-center text-sm">
         Don&apos;t have an account?{' '}
-        <Link href="/auth/signup" className="text-primary hover:underline">
+        <Link href="/auth/signup" className="text-primary underline underline-offset-2">
           Sign up
         </Link>
       </div>
