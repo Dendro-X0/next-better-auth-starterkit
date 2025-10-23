@@ -9,6 +9,7 @@ import { Toaster } from "sonner";
 import { RouteToasts } from "@/components/user/route-toasts";
 import { DevEnvWarning } from "@/components/dev-env-warning";
 import { Suspense } from "react";
+import { WebVitals } from "@/components/analytics/web-vitals";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -53,6 +54,7 @@ export default function RootLayout({
             <Suspense>
               <RouteToasts />
             </Suspense>
+            <WebVitals />
           </AppWithQueryClient>
         </ThemeProvider>
       </body>

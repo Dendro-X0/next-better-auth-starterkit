@@ -7,6 +7,7 @@ import { getSessionCookie } from "better-auth/cookies";
 const protectedRoutes: ReadonlyArray<string> = ["/user"];
 
 export default async function middleware(request: NextRequest): Promise<NextResponse> {
+  const t0: number = Date.now();
   const { pathname } = request.nextUrl;
   // Use Better Auth helper to get the session cookie to avoid name/prefix drift
   const sessionCookie: string | null = getSessionCookie(request);
@@ -18,10 +19,14 @@ export default async function middleware(request: NextRequest): Promise<NextResp
   // Redirect unauthenticated users away from protected routes
   if (!hasAuthCookies && isProtectedRoute) {
     const url = new URL("/auth/login", request.nextUrl.origin);
-    return NextResponse.redirect(url);
+    const res = NextResponse.redirect(url);
+    res.headers.set("Server-Timing", `mw;desc=auth;dur=${Date.now() - t0}`);
+    return res;
   }
 
-  return NextResponse.next();
+  const res = NextResponse.next();
+  res.headers.set("Server-Timing", `mw;desc=auth;dur=${Date.now() - t0}`);
+  return res;
 }
 
 export const config = {

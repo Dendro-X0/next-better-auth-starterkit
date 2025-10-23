@@ -6,7 +6,8 @@ export function Header() {
   return (
     <header className="border-b">
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <Link href="/" className="text-xl font-bold" aria-label="Home">
+        {/* Accessible name matches visible text to avoid label-content-name-mismatch */}
+        <Link href="/" className="text-xl font-bold">
           AuthBoilerplate
         </Link>
         <nav aria-label="Primary" className="flex items-center space-x-4">
