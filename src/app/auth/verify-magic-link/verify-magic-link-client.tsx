@@ -17,13 +17,16 @@ export default function VerifyMagicLinkClient(): JSX.Element {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
   const formRef = useRef<HTMLFormElement>(null);
-  const submitted = useRef<boolean>(false);
+  const hasSubmittedRef = useRef<boolean>(false);
   const [state, formAction, isPending] = useActionState(verifyMagicLinkAction, {} as FormState);
+  const hasResult: boolean = Object.keys(state ?? {}).length > 0;
+
   useEffect(() => {
-    if (token && !submitted.current) {
-      submitted.current = true;
-      formRef.current?.requestSubmit();
+    if (!token || hasSubmittedRef.current) {
+      return;
     }
+    hasSubmittedRef.current = true;
+    formRef.current?.requestSubmit();
   }, [token]);
   if (!token) {
     return (
@@ -36,7 +39,7 @@ export default function VerifyMagicLinkClient(): JSX.Element {
       </AuthCard>
     );
   }
-  if (isPending || !submitted.current) {
+  if (!hasResult || isPending) {
     return (
       <AuthCard title="Verifying..." description="Please wait while we verify your magic link.">
         <div className="flex items-center justify-center py-8">

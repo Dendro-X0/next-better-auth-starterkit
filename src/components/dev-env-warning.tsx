@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type ReactElement } from "react";
+import { useMemo, useState, type ReactElement } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
@@ -11,7 +11,11 @@ import { X } from "lucide-react";
  * prevent auth link issues when the dev port changes.
  */
 export function DevEnvWarning(): null | ReactElement {
-  const [dismissed, setDismissed] = useState<boolean>(false);
+  const [dismissed, setDismissed] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    const key = "dev-env-warning-dismissed";
+    return sessionStorage.getItem(key) === "true";
+  });
 
   const appUrl: string = (process.env.NEXT_PUBLIC_APP_URL as string) || "";
 
@@ -26,12 +30,6 @@ export function DevEnvWarning(): null | ReactElement {
       return false;
     }
   }, [appUrl]);
-
-  useEffect((): void => {
-    const key = "dev-env-warning-dismissed";
-    const stored = sessionStorage.getItem(key);
-    if (stored === "true") setDismissed(true);
-  }, []);
 
   const onDismiss = (): void => {
     setDismissed(true);

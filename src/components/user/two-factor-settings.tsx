@@ -25,29 +25,27 @@ export function TwoFactorSettings({
   backupCodes: initialBackupCodes,
 }: TwoFactorSettingsProps) {
   // Component UI state
-  const [isEnabled, setIsEnabled] = useState(initialEnabled)
-  const [backupCodes, setBackupCodes] = useState<string[]>(initialBackupCodes || [])
-  const [qrCode, setQrCode] = useState<string>("")
-  const [qrSvg, setQrSvg] = useState<string>("")
   const [showSetupDialog, setShowSetupDialog] = useState(false)
   const [showPasswordDialog, setShowPasswordDialog] = useState(false)
-
+  const [qrSvg, setQrSvg] = useState<string>("")
   // Action states
   const [enable2FAState, enable2FAFormAction] = useActionState(enable2FAAction, null);
   const [disable2FAState, disable2FAFormAction] = useActionState(disable2FAAction, null);
   const [generateCodesState, generateCodesFormAction] = useActionState(generateBackupCodesAction, null);
 
-  // Effect to handle successful 2FA enablement
-  useEffect(() => {
-    if (enable2FAState?.success) {
-      setQrCode(enable2FAState.qrCode || "")
-      setBackupCodes(enable2FAState.backupCodes || [])
-      setShowPasswordDialog(false)
-      setShowSetupDialog(true)
-      setIsEnabled(true)
-      toastUtils.fromFormState(enable2FAState, "2FA enabled successfully.")
-    }
-  }, [enable2FAState])
+  // Derived state from server actions
+  const isEnabled: boolean = disable2FAState?.success
+    ? false
+    : enable2FAState?.success
+      ? true
+      : initialEnabled
+
+  const backupCodes: string[] = generateCodesState?.backupCodes
+    || enable2FAState?.backupCodes
+    || initialBackupCodes
+    || []
+
+  const qrCode: string = enable2FAState?.qrCode || ""
 
   // Generate an SVG QR code from the otpauth URI provided by the server
   useEffect(() => {
@@ -66,23 +64,6 @@ export function TwoFactorSettings({
     generate()
     return () => { active = false }
   }, [qrCode])
-
-  // Effect to handle successful 2FA disablement
-  useEffect(() => {
-    if (disable2FAState?.success) {
-      setIsEnabled(false)
-      setBackupCodes([])
-      toastUtils.fromFormState(disable2FAState, "2FA disabled successfully.")
-    }
-  }, [disable2FAState])
-
-  // Effect to handle successful backup code generation
-  useEffect(() => {
-    if (generateCodesState?.success) {
-      setBackupCodes(generateCodesState.backupCodes || [])
-      toastUtils.fromFormState(generateCodesState, "New backup codes generated.")
-    }
-  }, [generateCodesState])
 
   const downloadBackupCodes = () => {
     const content = backupCodes.join("\n")
