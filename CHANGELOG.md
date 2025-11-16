@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2025-11-15
+
+### Added
+- Added support for Next.js 16 App Router.
+
 ## 2025-10-23
 
 ### Fixed

@@ -8,11 +8,6 @@ const nextConfig: NextConfig = {
       { source: "/signup", destination: "/auth/signup", permanent: false },
     ];
   },
-  eslint: {
-    // Allow preview deployments to proceed even if ESLint fails.
-    // Production builds remain strict.
-    ignoreDuringBuilds: process.env.VERCEL_ENV === 'preview',
-  },
   experimental: {
     optimizePackageImports: [
       'lucide-react',

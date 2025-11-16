@@ -54,7 +54,7 @@ export default function HomePage() {
                 <Zap className="w-5 h-5 text-blue-600" />
               </div>
               <div className="text-left">
-                <div className="font-semibold text-foreground">Next.js 15</div>
+                <div className="font-semibold text-foreground">Next.js 16</div>
                 <div className="text-sm text-muted-foreground">Built on App Router</div>
               </div>
             </div>
