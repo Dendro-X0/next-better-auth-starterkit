@@ -1,9 +1,72 @@
 {
-  "id": "46b10a40-3097-47e8-86f1-b28e199de505",
+  "id": "760dbe81-c25e-46a4-b276-02820626869a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.user_profile": {
+      "name": "user_profile",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "bio": {
+          "name": "bio",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "location": {
+          "name": "location",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "website": {
+          "name": "website",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notifications": {
+          "name": "notifications",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "privacy": {
+          "name": "privacy",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "user_profile_id_user_id_fk": {
+          "name": "user_profile_id_user_id_fk",
+          "tableFrom": "user_profile",
+          "tableTo": "user",
+          "columnsFrom": [
+            "id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.account": {
       "name": "account",
       "schema": "",
@@ -25,12 +88,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
-        },
-        "password": {
-          "name": "password",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
         },
         "user_id": {
           "name": "user_id",
@@ -70,6 +127,12 @@
         },
         "scope": {
           "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "password": {
+          "name": "password",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -192,6 +255,57 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.two_factor": {
+      "name": "two_factor",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "secret": {
+          "name": "secret",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "backup_codes": {
+          "name": "backup_codes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "two_factor_user_id_user_id_fk": {
+          "name": "two_factor_user_id_user_id_fk",
+          "tableFrom": "two_factor",
+          "tableTo": "user",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.user": {
       "name": "user",
       "schema": "",
@@ -218,8 +332,7 @@
           "name": "email_verified",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": true,
-          "default": false
+          "notNull": true
         },
         "image": {
           "name": "image",
@@ -231,38 +344,35 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": true
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": true,
-          "default": "now()"
+          "notNull": true
+        },
+        "username": {
+          "name": "username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "display_username": {
+          "name": "display_username",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "two_factor_enabled": {
           "name": "two_factor_enabled",
           "type": "boolean",
           "primaryKey": false,
-          "notNull": true,
-          "default": false
-        },
-        "two_factor_secret": {
-          "name": "two_factor_secret",
-          "type": "text",
-          "primaryKey": false,
           "notNull": false
         },
-        "two_factor_backup_codes": {
-          "name": "two_factor_backup_codes",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "username": {
-          "name": "username",
-          "type": "text",
+        "onboarding_complete": {
+          "name": "onboarding_complete",
+          "type": "boolean",
           "primaryKey": false,
           "notNull": false
         }
@@ -322,15 +432,13 @@
           "name": "created_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": false
         },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp",
           "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
+          "notNull": false
         }
       },
       "indexes": {},
