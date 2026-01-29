@@ -78,7 +78,7 @@ jobs:
 
       - name: Install dependencies (Assembled Pro)
         working-directory: .tmp/pro
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: Apply premium overlay
         working-directory: .tmp/pro

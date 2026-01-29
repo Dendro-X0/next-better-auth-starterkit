@@ -169,6 +169,35 @@ const readJson = (filePath: string): unknown => {
   return JSON.parse(raw) as unknown;
 };
 
+const writeJson = (params: { readonly filePath: string; readonly data: unknown; readonly dryRun: boolean }): void => {
+  const content: string = `${JSON.stringify(params.data, null, 2)}\n`;
+  writeUtf8({ filePath: params.filePath, content, dryRun: params.dryRun });
+};
+
+const mergeDeep = (target: any, source: any): any => {
+  for (const key of Object.keys(source)) {
+    if (source[key] instanceof Object && key in target) {
+      Object.assign(source[key], mergeDeep(target[key], source[key]));
+    }
+  }
+  Object.assign(target || {}, source);
+  return target;
+};
+
+const mergePackageJson = (params: {
+  readonly targetDir: string;
+  readonly patchPath: string;
+  readonly dryRun: boolean;
+}): string | undefined => {
+  const pkgPath: string = path.join(params.targetDir, "package.json");
+  if (!fileExists(pkgPath) || !fileExists(params.patchPath)) return undefined;
+  const pkg: any = readJson(pkgPath);
+  const patch: any = readJson(params.patchPath);
+  const merged: any = mergeDeep(pkg, patch);
+  writeJson({ filePath: pkgPath, data: merged, dryRun: params.dryRun });
+  return "Merged package.json with Pro-specific dependencies.";
+};
+
 const patchDrizzleJournal = (params: {
   readonly overlayPatchDir: string;
   readonly targetDrizzleDir: string;
@@ -276,6 +305,12 @@ const runInstall = (opts: CliOptions): InstallResult => {
     const patchMessages: readonly string[] = patchDrizzleJournal({ overlayPatchDir, targetDrizzleDir, dryRun: opts.dryRun });
     warnings.push(...patchMessages);
   }
+  const pkgMsg: string | undefined = mergePackageJson({
+    targetDir: process.cwd(),
+    patchPath: path.join(overlayRootDir, "package-pro.json"),
+    dryRun: opts.dryRun,
+  });
+  if (pkgMsg) warnings.push(pkgMsg);
   return { copied, conflicts, warnings };
 };
 
