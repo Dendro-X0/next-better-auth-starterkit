@@ -25,6 +25,7 @@ interface EmailService {
   send(payload: EmailPayload): Promise<void>;
   sendVerificationEmail(payload: VerificationEmailPayload): Promise<void>;
   sendMagicLinkEmail(payload: MagicLinkEmailPayload): Promise<void>;
+  sendPasswordResetEmail(payload: VerificationEmailPayload): Promise<void>;
 }
 
 /**
@@ -60,6 +61,11 @@ function createEmailService(): EmailService {
         const html = `<p>Click the link below to sign in:</p><p><a href="${url}">Sign in</a></p>`;
         await this.send({ to: email, subject, html, text: `Sign in: ${url}` });
       },
+      async sendPasswordResetEmail({ email, url, name }: VerificationEmailPayload): Promise<void> {
+        const subject = "Reset your password";
+        const html = `<p>Hello ${name ?? "there"},</p><p>Please reset your password by clicking the link below:</p><p><a href="${url}">Reset Password</a></p>`;
+        await this.send({ to: email, subject, html, text: `Reset your password: ${url}` });
+      },
     };
   }
 
@@ -90,6 +96,11 @@ function createEmailService(): EmailService {
       const subject = "Your magic sign-in link";
       const html = `<p>Click the link below to sign in:</p><p><a href="${url}">Sign in</a></p>`;
       await this.send({ to: email, subject, html, text: `Sign in: ${url}` });
+    },
+    async sendPasswordResetEmail({ email, url, name }: VerificationEmailPayload): Promise<void> {
+      const subject = "Reset your password";
+      const html = `<p>Hello ${name ?? "there"},</p><p>Please reset your password by clicking the link below:</p><p><a href="${url}">Reset Password</a></p>`;
+      await this.send({ to: email, subject, html, text: `Reset your password: ${url}` });
     },
   };
 }

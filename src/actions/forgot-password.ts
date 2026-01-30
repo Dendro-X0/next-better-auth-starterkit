@@ -32,7 +32,7 @@ export async function forgotPasswordAction(
       return { error: { message: "Too many password reset requests. Please try again later." } };
     }
 
-    await auth.api.forgetPassword({ body: { email } });
+    await auth.api.requestPasswordReset({ body: { email } });
   } catch (error: unknown) {
     // Log the error for debugging, but don't expose it to the client to prevent email enumeration.
     console.error("Forgot password error:", error);
